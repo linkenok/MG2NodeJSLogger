@@ -8,7 +8,7 @@ export class MG2NodeJSLogger {
         this.logger = new MG2Log4JS(configuration);
     }
 
-    public log(logType: "default" | "performance", verbosityLevel: "fatal" | "error" | "warn" | "info" | "debug", logData: LogData) {
+    public log(logType: string, verbosityLevel: "fatal" | "error" | "warn" | "info" | "debug", logData: LogData) {
         let data = this.mapLogData(logData, logType);
 
         switch (logType.toLowerCase()) {
@@ -22,39 +22,51 @@ export class MG2NodeJSLogger {
         }
     }
 
-    private mapLogData(data: LogData, logType: "default" | "performance") {
+    private mapLogData(data: LogData, logType: string) {
         var mappedData = new LogData(data);
 
         if (logType.toLowerCase() === "performance") {
-            return `${mappedData.methodGuid}|${mappedData.methodName}|${mappedData.codeSectionDescriptor}|${mappedData.beginEnd}|${mappedData.externalRequestGuid}|${mappedData.misc1}|${mappedData.misc2}|${mappedData.misc3}|${mappedData.eventLogId}|${mappedData.ipAddress}`;
+            return `${this.replacePipeLine(mappedData.methodGuid)}|${this.replacePipeLine(mappedData.methodName)}|${this.replacePipeLine(mappedData.codeSectionDescriptor)}|${this.replacePipeLine(mappedData.beginEnd)}|${this.replacePipeLine(mappedData.externalRequestGuid)}|${this.replacePipeLine(mappedData.misc1)}|${this.replacePipeLine(mappedData.misc2)}|${this.replacePipeLine(mappedData.misc3)}|${this.replacePipeLine(mappedData.eventLogId)}|${this.replacePipeLine(mappedData.ipAddress)}`;
         } 
-        return `${mappedData.methodGuid}|${mappedData.methodName}|${mappedData.codeSectionDescriptor}|${mappedData.timeElapsed}|${mappedData.externalRequestGuid}|${mappedData.misc1}|${mappedData.misc2}|${mappedData.misc3}|${mappedData.misc4}|${mappedData.ipAddress}`; 
+        return `${this.replacePipeLine(mappedData.methodGuid)}|${this.replacePipeLine(mappedData.methodName)}|${this.replacePipeLine(mappedData.codeSectionDescriptor)}|${this.replacePipeLine(mappedData.timeElapsed)}|${this.replacePipeLine(mappedData.externalRequestGuid)}|${this.replacePipeLine(mappedData.misc1)}|${this.replacePipeLine(mappedData.misc2)}|${this.replacePipeLine(mappedData.misc3)}|${this.replacePipeLine(mappedData.misc4)}|${this.replacePipeLine(mappedData.ipAddress)}`; 
     }
 
     private writeLog(logger, verbosityLevel, data) {
         switch (verbosityLevel.toLowerCase()) {
             case "fatal": {
                 logger.fatal(data);
+                this.logger.Email.fatal(data);
                 break;
             } 
             case "error": {
                 logger.error(data);
+                this.logger.Email.error(data);
                 break;
             }
             case "warn": {
                 logger.warn(data);
+                this.logger.Email.warn(data);
                 break;
             }
             case "info": {
                 logger.info(data);
+                this.logger.Email.info(data);
                 break;
             }
             case "debug": {
                 logger.debug(data);
+                this.logger.Email.debug(data);
                 break;
             }
             default: break;
         }
+    }
+
+    private replacePipeLine(str: string) {
+        if (!str) {
+            return str;
+        }
+        return str.replace('|', '{bar}');
     }
 
 }
