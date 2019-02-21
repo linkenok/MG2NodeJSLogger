@@ -1,17 +1,20 @@
 {
   "name": "mg2nodejslogger",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "",
   "main": "lib/index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc"
   },
   "author": "MG2",
   "license": "ISC",
   "dependencies": {
     "@log4js-node/smtp": "^1.0.1",
-    "@types/node": "^10.9.2",
-    "log4js": "^3.0.5",
-    "typescript": "^3.0.1"
+    "log4js": "^3.0.5"
+  },
+  "devDependencies": {
+    "@types/node": "^11.9.4",
+    "typescript": "^3.3.3"
   }
 }
